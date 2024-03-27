@@ -1,0 +1,16 @@
+.App {
+    padding: 30px;
+    display: flex;
+    justify-content: center;
+}
+
+.App > div {
+    margin-right: 50px;
+}
+
+.todoList {
+    border: 1px solid gray;
+    border-radius: 5px;
+    background-color: orchid;
+    padding: 5px;
+}
