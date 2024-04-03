@@ -1,3 +1,7 @@
+import {FilterValuesType} from "./App";
+import {useState} from "react";
+
+
 type TodoListPropsType = {
     title: string
     tasks: Array<TaskType>
@@ -10,9 +14,30 @@ export type TaskType = {
     isDone: boolean
 }
 
-export const TodoList = ({title, tasks, removeTask}: TodoListPropsType) => {
+export const TodoList = (
+    {
+        title,
+        tasks,
+        removeTask,
+    }: TodoListPropsType) => {
 
-    const tasksList: Array<JSX.Element> = tasks.map(task => {
+
+    const [filter, setFilter] = useState<FilterValuesType>("all")
+
+    const getTasksForTodoList = (allTasks: Array<TaskType>, nextFilterValue: FilterValuesType) => {
+        switch (nextFilterValue) {
+            case "active":
+                return allTasks.filter(t  => !t.isDone);
+            case "completed":
+                return allTasks.filter(t  => t.isDone);
+            default:
+                return allTasks;
+        }
+    }
+
+    const tasksForTodoList = getTasksForTodoList(tasks, filter)
+
+    const tasksList: Array<JSX.Element> = tasksForTodoList.map(task => {
         const removeTaskHandler = () => removeTask(task.id)
         return (
             <li>
@@ -34,9 +59,9 @@ export const TodoList = ({title, tasks, removeTask}: TodoListPropsType) => {
                 {tasksList}
             </ul>
             <div>
-                <button>All</button>
-                <button>Active</button>
-                <button>Completed</button>
+                <button onClick={() => setFilter("all")}>All</button>
+                <button onClick={() => setFilter("active")}>Active</button>
+                <button onClick={() => setFilter("completed")}>Completed</button>
             </div>
         </div>
     )

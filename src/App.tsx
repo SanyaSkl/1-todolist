@@ -2,9 +2,10 @@ import React, {useState} from 'react';
 import './App.css';
 import {TodoList} from "./TodoList";
 
+
+export type FilterValuesType = "all" | "active" | "completed"
+
 function App() {
-
-
     const todoListTitle = "What to learn"
 
     const [tasks, setTasks] = useState([
@@ -21,9 +22,9 @@ function App() {
     return (
         <div className="App">
             <TodoList
-                title={todoListTitle}
-                tasks={tasks}
-                removeTask={removeTask}
+                title = {todoListTitle}
+                tasks = {tasks}
+                removeTask = {removeTask}
             />
         </div>
     )
