@@ -1,6 +1,7 @@
 type TodoListPropsType = {
     title: string
     tasks: Array<TaskType>
+    removeTask: (taskId: number) => void
 }
 
 export type TaskType = {
@@ -9,13 +10,15 @@ export type TaskType = {
     isDone: boolean
 }
 
-export const TodoList = ({title, tasks}: TodoListPropsType) => {
+export const TodoList = ({title, tasks, removeTask}: TodoListPropsType) => {
 
     const tasksList: Array<JSX.Element> = tasks.map(task => {
+        const removeTaskHandler = () => removeTask(task.id)
         return (
             <li>
                 <input type="checkbox" checked={task.isDone}/>
                 <span>{task.title}</span>
+                <button onClick={removeTaskHandler}>X</button>
             </li>
         )
     })
