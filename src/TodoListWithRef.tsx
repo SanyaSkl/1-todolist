@@ -1,5 +1,5 @@
 import {FilterValuesType} from "./App";
-import {useState} from "react";
+import {useRef, useState} from "react";
 
 
 type TodoListPropsType = {
@@ -25,13 +25,15 @@ export const TodoList = (
 
 
     const [filter, setFilter] = useState<FilterValuesType>("all")
-    const [taskTitle, setTaskTitle] = useState("")
+
+    const taskTitleInput = useRef<HTMLInputElement>(null)
+
     const getTasksForTodoList = (allTasks: Array<TaskType>, nextFilterValue: FilterValuesType) => {
         switch (nextFilterValue) {
             case "active":
-                return allTasks.filter(t => !t.isDone);
+                return allTasks.filter(t  => !t.isDone);
             case "completed":
-                return allTasks.filter(t => t.isDone);
+                return allTasks.filter(t  => t.isDone);
             default:
                 return allTasks;
         }
@@ -39,8 +41,7 @@ export const TodoList = (
 
     const tasksForTodoList = getTasksForTodoList(tasks, filter)
 
-    const tasksList: Array<JSX.Element> | JSX.Element = tasks.length
-       ? tasksForTodoList.map(task => {
+    const tasksList: Array<JSX.Element> = tasksForTodoList.map(task => {
         const removeTaskHandler = () => removeTask(task.id)
         return (
             <li>
@@ -50,32 +51,25 @@ export const TodoList = (
             </li>
         )
     })
-    : <div>Your tasksList is empty</div>
 
     const onClickHandlerCreator = (filter: FilterValuesType) => {
         return () => setFilter(filter)
     }
     const onClickAddTaskHandler = () => {
-        addTask(taskTitle)
-        setTaskTitle("")
+        if (taskTitleInput.current) {
+            const newTaskValue = taskTitleInput.current.value
+            addTask(newTaskValue)
+            taskTitleInput.current.value = ""
+        }
     }
 
-const isTitleTooLong = taskTitle.length > 15
     return (
         <div className="todoList">
             <h3>{title}</h3>
             <div>
-                <input
-                    value={taskTitle}
-                    onChange={(e) => {
-                        setTaskTitle(e.currentTarget.value)
-                    }}
-                />
-                <button
-                    disabled={!taskTitle || isTitleTooLong}
-                    onClick={onClickAddTaskHandler}
-                >+</button>
-                {taskTitle.length > 15 && <div>Your task title is too long</div>}
+                <input ref={taskTitleInput}/>
+                <button onClick={onClickAddTaskHandler}>+</button>
+
             </div>
             <ul>
                 {tasksList}
