@@ -1,44 +1,44 @@
-import {ChangeEvent, KeyboardEvent, useState} from "react";
 import {Button} from "./Button";
+import {ChangeEvent, KeyboardEvent, useState} from "react";
 
 type Props = {
-    addItem: (title: string, todolistId: string) => void
-    todolistId: string
+    addItem:(title: string)=>void
 };
-
-export const AddItemForm = ({addItem, todolistId}: Props) => {
-    const [title, setTitle] = useState("")
+export const AddItemForm = ({addItem}: Props) => {
+    const [taskTitle, setTaskTitle] = useState('')
     const [error, setError] = useState<string | null>(null)
 
+
     const addItemHandler = () => {
-        if (title.trim() !== "") {
-            addItem(title.trim(), todolistId);
-            setTitle("");
+        if (taskTitle.trim() !== '') {
+            addItem(taskTitle.trim())
+            setTaskTitle('')
         } else {
-            setError("Title is required");
+            setError('Title is required')
         }
     }
 
-    const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        setTitle(e.currentTarget.value)
+    const changeItemTitleHandler = (event: ChangeEvent<HTMLInputElement>) => {
+        setTaskTitle(event.currentTarget.value)
     }
 
-    const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-        setError(null);
-        if (e.key === 'Enter') {
-            addItemHandler();
+    const addTaskOnKeyUpHandler = (event: KeyboardEvent<HTMLInputElement>) => {
+        setError(null)
+        if (event.key === 'Enter') {
+            addItemHandler()
         }
     }
 
     return (
         <div>
-            <input value={title}
-                   onChange={onChangeHandler}
-                   onKeyUp={onKeyPressHandler}
-                   className={error ? "error" : ""}
+            <input
+                className={error ? 'error' : ''}
+                value={taskTitle}
+                onChange={changeItemTitleHandler}
+                onKeyUp={addTaskOnKeyUpHandler}
             />
-            <Button onClick={addItemHandler} title={'+'}/>
-            {error && <div className="error-message">{error}</div>}
+            <Button title={'+'} onClick={addItemHandler}/>
+            {error && <div className={'error-message'}>{error}</div>}
         </div>
     );
 };
