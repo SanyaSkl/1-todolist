@@ -1,16 +1,35 @@
-import {useState} from "react";
+import {ChangeEvent, useState} from "react";
+
 
 type Props = {
-    value: string
+    oldTitle: string
+    changeItem: (oldTitle: string) => void
 };
-export const EditableSpan = ({value}: Props) => {
+export const EditableSpan = ({oldTitle, changeItem}: Props) => {
+
     const [editMod, setEditMode] = useState(false)
-    const ActivateEditMode = () => {
-        setEditMode(true)
+    const [newTitle, setNewTitle] = useState(oldTitle)
+
+    const activateEditMode = () => {
+        setEditMode(!editMod)
+        if(editMod && newTitle.trim()) {
+            changeItem(newTitle.trim())
+        }
+
     }
+
+    const changeTitleHandler = (event: ChangeEvent<HTMLInputElement>) => {
+        setNewTitle(event.currentTarget.value)
+    }
+
     return (
         editMod
-            ? <input value={value}/>
-            : <span onDoubleClick={ActivateEditMode}>{value}</span>
+            ? <input
+                value={newTitle}
+                onBlur={activateEditMode}
+                autoFocus
+                onChange={changeTitleHandler}
+            />
+            : <span onDoubleClick={activateEditMode}>{oldTitle}</span>
     );
 };
