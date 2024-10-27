@@ -4,7 +4,7 @@ import {ChangeEvent, KeyboardEvent, useState} from "react";
 import TextField from '@mui/material/TextField'
 
 type Props = {
-    addItem:(title: string)=>void
+    addItem: (title: string) => void
 };
 export const AddItemForm = ({addItem}: Props) => {
     const [taskTitle, setTaskTitle] = useState('')
@@ -51,15 +51,7 @@ export const AddItemForm = ({addItem}: Props) => {
                 onKeyUp={addTaskOnKeyUpHandler}
                 size="small"
             />
-            {/*<input*/}
-            {/*    className={error ? 'error' : ''}*/}
-            {/*    value={taskTitle}*/}
-            {/*    onChange={changeItemTitleHandler}*/}
-            {/*    onKeyUp={addTaskOnKeyUpHandler}*/}
-            {/*/>*/}
             <Button variant="contained" onClick={addItemHandler} size="small" style={buttonStyle}>+</Button>
-            {/*<Button title={'+'} onClick={addItemHandler}/>*/}
-            {/*{error && <div className={'error-message'}>{error}</div>}*/}
         </div>
     );
 };
