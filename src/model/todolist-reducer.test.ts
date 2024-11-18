@@ -89,12 +89,12 @@ test('correct filter of todolist should be changed', () => {
     //     type: 'CHANGE-TODOLIST-FILTER',
     //     payload: {
     //         id: todolistId2,
-    //         filter: 'all',
+    //         filter: 'completed',
     //     },
     // } as const
 
-    const endState = todolistReducer(startState, changeTodolistFilterAC(todolistId2, 'all'))
+    const endState = todolistReducer(startState, changeTodolistFilterAC(todolistId2, 'completed'))
 
     expect(endState[0].filter).toBe('all')
-    expect(endState[1].filter).toBe('all')
+    expect(endState[1].filter).toBe('completed')
 })
