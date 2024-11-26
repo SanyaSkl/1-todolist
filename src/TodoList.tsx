@@ -1,4 +1,3 @@
-import {FilterValuesType, TaskType} from "./App";
 import {ChangeEvent} from "react";
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
@@ -10,6 +9,7 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import Box from "@mui/material/Box";
 import {filterButtonContainerSx, getListItemSx} from "./Todolist.styles";
+import type {FilterValuesType, TaskType} from "./app/App";
 
 
 type PropsType = {

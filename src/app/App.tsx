@@ -1,22 +1,21 @@
-import './App.css';
-import {Todolist} from "../Todolist";
-import {useReducer, useState} from "react";
-import {v1} from "uuid";
-import {AddItemForm} from "../AddItemForm";
-import ButtonAppBar from "../ButtonAppBar";
+import {CssBaseline} from "@mui/material";
 import Container from '@mui/material/Container'
 import Grid from '@mui/material/Grid2';
 import Paper from '@mui/material/Paper'
 import {createTheme, ThemeProvider} from '@mui/material/styles';
-import {CssBaseline} from "@mui/material";
+import {useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {AddItemForm} from "../AddItemForm";
+import ButtonAppBar from "../ButtonAppBar";
+import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC} from "../model/task-reducer";
 import {
     addTodolistAC,
     changeTodolistFilterAC,
-    changeTodolistTitleAC, removeTodolistAC,
-    todolistsReducer
+    changeTodolistTitleAC,
+    removeTodolistAC,
 } from "../model/todolists-reducer";
-import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, tasksReducer} from "../model/task-reducer";
-import {useDispatch, useSelector} from "react-redux";
+import {Todolist} from "../Todolist";
+import './App.css';
 import {RootState} from "./store";
 
 export type TaskType = {
@@ -53,12 +52,12 @@ function App() {
         dispatch(addTodolistAC(title))
     }
 
-    const changeFilter = (filter: FilterValuesType, todolistId: string) => {
-        dispatch(changeTodolistFilterAC(todolistId, filter))
+    const changeFilter = (filter: FilterValuesType, id: string) => {
+        dispatch(changeTodolistFilterAC({id, filter}))
     }
 
-    const changeTodolistTitle = (todolistId: string, title: string) => {
-        dispatch(changeTodolistTitleAC(todolistId, title))
+    const changeTodolistTitle = (id: string, title: string) => {
+        dispatch(changeTodolistTitleAC({id, title}))
     }
 
 

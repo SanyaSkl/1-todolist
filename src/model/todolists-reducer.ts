@@ -50,12 +50,12 @@ export const addTodolistAC = (title: string) => {
     return {type: 'ADD-TODOLIST', payload: {title, id: v1()}} as const
 }
 
-export const changeTodolistTitleAC = (id: string, title: string) => {
-    return {type: 'CHANGE-TODOLIST-TITLE', payload: {id, title}} as const
+export const changeTodolistTitleAC = (payload: {id: string, title: string}) => {
+    return {type: 'CHANGE-TODOLIST-TITLE', payload} as const
 }
 
-export const changeTodolistFilterAC = (id: string, filter: FilterValuesType) => {
-    return {type: 'CHANGE-TODOLIST-FILTER', payload: {id, filter}} as const
+export const changeTodolistFilterAC = (payload: {id: string, filter: FilterValuesType}) => {
+    return {type: 'CHANGE-TODOLIST-FILTER', payload} as const
 }
 
 
