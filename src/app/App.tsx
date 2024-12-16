@@ -2,11 +2,11 @@ import {CssBaseline} from "@mui/material";
 import Container from '@mui/material/Container'
 import Grid from '@mui/material/Grid2';
 import Paper from '@mui/material/Paper'
-import {createTheme, ThemeProvider} from '@mui/material/styles';
-import {useState} from "react";
+import {ThemeProvider} from '@mui/material/styles';
 import {useDispatch, useSelector} from "react-redux";
 import {AddItemForm} from "../AddItemForm";
 import ButtonAppBar from "../ButtonAppBar";
+import {getTheme} from "../common/theme/theme";
 import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC} from "../model/task-reducer";
 import {
     addTodolistAC,
@@ -15,6 +15,7 @@ import {
     removeTodolistAC,
 } from "../model/todolists-reducer";
 import {Todolist} from "../Todolist";
+import {switchThemeAC, ThemeMode} from "./app-reducer";
 import './App.css';
 import {RootState} from "./store";
 
@@ -35,13 +36,15 @@ export type TodolistType = {
 export type TasksStateType = {
     [key: string]: TaskType[]
 }
-type ThemeMode = 'dark' | 'light'
+
 
 function App() {
 
     const tasks = useSelector<RootState, TasksStateType>(state => state.tasks)
     const todolists = useSelector<RootState, TodolistType[]>(state => state.todolists)
+    const themeMode = useSelector<RootState, ThemeMode>(state => state.app.themeMode)
 
+    const theme = getTheme(themeMode)
     const dispatch = useDispatch()
 
     const removeTodolist = (todolistId: string) => {
@@ -78,18 +81,8 @@ function App() {
     }
 
 
-    const [themeMode, setThemeMode] = useState<ThemeMode>('light')
-    const theme = createTheme({
-        palette: {
-            mode: themeMode,
-            primary: {
-                main: '#505383',
-            },
-        },
-    });
-
     const changeModeHandler = () => {
-        setThemeMode(themeMode === 'light' ? 'dark' : 'light')
+        dispatch(switchThemeAC(themeMode === 'light' ? 'dark' : 'light'))
     }
 
     return (
