@@ -1,16 +1,9 @@
 import {CssBaseline} from "@mui/material";
 import {ThemeProvider} from '@mui/material/styles';
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 import {getTheme} from "../common/theme/theme";
 import {Header} from "../Header";
-import Main from "../Main";
-import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC} from "../model/task-reducer";
-import {
-    addTodolistAC,
-    changeTodolistFilterAC,
-    changeTodolistTitleAC,
-    removeTodolistAC,
-} from "../model/todolists-reducer";
+import {Main} from "../Main";
 import {ThemeMode} from "./app-reducer";
 import './App.css';
 import {RootState} from "./store";
