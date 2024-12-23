@@ -1,6 +1,6 @@
-import {addTodolistAC, todolistsReducer} from "./todolists-reducer";
-import {tasksReducer} from "./task-reducer";
-import {TasksStateType, TodolistType} from "../app/App";
+import {addTodolistAC, todolistsReducer} from "../todolists-reducer";
+import {tasksReducer} from "../task-reducer";
+import {TasksStateType, TodolistType} from "../../../../app/App";
 
 
 

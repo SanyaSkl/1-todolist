@@ -4,17 +4,18 @@ import IconButton from "@mui/material/IconButton";
 import Switch from "@mui/material/Switch";
 import Toolbar from "@mui/material/Toolbar";
 import React from "react";
-import {useDispatch, useSelector} from "react-redux";
-import {switchThemeAC, ThemeMode} from "./app/app-reducer";
-import {RootState} from "./app/store";
-import {getTheme} from "./common/theme/theme";
-import {MenuButton} from "./MenuButton";
+import {switchThemeAC} from "../../../app/app-reducer";
+import {selectTheme} from "../../../app/appSelectors";
+import {useAppDispatch} from "../../hooks/useAppDispatch";
+import {useAppSelector} from "../../hooks/useAppSelector";
+import {getTheme} from "../../theme/theme";
+import {MenuButton} from "../MenuButton/MenuButton";
 
 export const Header = () => {
-    const themeMode = useSelector<RootState, ThemeMode>(state => state.app.themeMode)
+    const themeMode = useAppSelector(selectTheme)
     const theme = getTheme(themeMode)
 
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
 
     const changeModeHandler = () => {
         dispatch(switchThemeAC(themeMode === 'light' ? 'dark' : 'light'))
