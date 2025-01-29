@@ -48,12 +48,12 @@ export type UpdateTaskModel = {
 
 export const AppHttpRequests = () => {
     const [todolists, setTodolists] = useState<Todolist[]>([])
-    const [tasks, setTasks] = useState<{[key:string]: Task[]}>({})
+    const [tasks, setTasks] = useState<{ [key: string]: Task[] }>({})
 
     useEffect(() => {
         axios.get<Todolist[]>('https://social-network.samuraijs.com/api/1.1/todo-lists', {
             headers: {
-                Authorization: 'Bearer **************************************',
+                Authorization: 'Bearer *************************************',
             }
         }).then(res => {
             const todolists = res.data
@@ -61,8 +61,8 @@ export const AppHttpRequests = () => {
             todolists.forEach(tl => {
                 axios.get<GetTaskResponse>(`https://social-network.samuraijs.com/api/1.1/todo-lists/${tl.id}/tasks`, {
                     headers: {
-                        Authorization: 'Bearer **************************************',
-                        'API-KEY': '**************************************',
+                        Authorization: 'Bearer *************************************',
+                        'API-KEY': '*************************************',
                     }
                 }).then(res => {
                     setTasks(prev => ({...prev, [tl.id]: res.data.items}))
@@ -75,8 +75,8 @@ export const AppHttpRequests = () => {
         axios.post<Response<{ item: Todolist }>>('https://social-network.samuraijs.com/api/1.1/todo-lists',
             {title}, {
                 headers: {
-                    Authorization: 'Bearer **************************************',
-                    'API-KEY': '**************************************',
+                    Authorization: 'Bearer *************************************',
+                    'API-KEY': '*************************************',
                 },
             }).then(res => {
             const newTodolist = res.data.data.item
@@ -87,8 +87,8 @@ export const AppHttpRequests = () => {
     const removeTodolistHandler = (id: string) => {
         axios.delete<Response>(`https://social-network.samuraijs.com/api/1.1/todo-lists/${id}`, {
             headers: {
-                Authorization: 'Bearer **************************************',
-                'API-KEY': '**************************************',
+                Authorization: 'Bearer *************************************',
+                'API-KEY': '*************************************',
             },
         }).then(() => {
             setTodolists(todolists.filter(tl => tl.id !== id))
@@ -99,8 +99,8 @@ export const AppHttpRequests = () => {
         axios.put<Response>(`https://social-network.samuraijs.com/api/1.1/todo-lists/${id}`,
             {title}, {
                 headers: {
-                    Authorization: 'Bearer **************************************',
-                    'API-KEY': '**************************************',
+                    Authorization: 'Bearer *************************************',
+                    'API-KEY': '*************************************',
                 },
             }).then(() => {
             setTodolists(todolists.map(tl => tl.id === id ? {...tl, title} : tl))
@@ -111,8 +111,8 @@ export const AppHttpRequests = () => {
         axios.post<Response<{ item: Task }>>(`https://social-network.samuraijs.com/api/1.1/todo-lists/${todolistId}/tasks`,
             {title}, {
                 headers: {
-                    Authorization: 'Bearer **************************************',
-                    'API-KEY': '**************************************',
+                    Authorization: 'Bearer *************************************',
+                    'API-KEY': '*************************************',
                 },
             }).then(res => {
             const newTask = res.data.data.item
@@ -121,7 +121,14 @@ export const AppHttpRequests = () => {
     }
 
     const removeTaskHandler = (taskId: string, todolistId: string) => {
-
+        axios.delete<Response>(`https://social-network.samuraijs.com/api/1.1/todo-lists/${todolistId}/tasks/${taskId}`, {
+            headers: {
+                Authorization: 'Bearer *************************************',
+                'API-KEY': '*************************************',
+            },
+        }).then(() => {
+            setTasks({...tasks, [todolistId]: tasks[todolistId].filter(t => t.id !== taskId)})
+        })
     }
 
     const changeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>, task: Task, todolistId: string) => {
@@ -137,17 +144,25 @@ export const AppHttpRequests = () => {
         axios.put<Response<{ item: Task }>>(`https://social-network.samuraijs.com/api/1.1/todo-lists/${todolistId}/tasks/${task.id}`,
             model, {
                 headers: {
-                    Authorization: 'Bearer **************************************',
-                    'API-KEY': '**************************************',
+                    Authorization: 'Bearer *************************************',
+                    'API-KEY': '*************************************',
                 },
             }).then(res => {
-                const newTask = res.data.data.item
-setTasks({...tasks, [todolistId]: tasks[todolistId].map(t => t.id === task.id ? newTask : t)})
+            const newTask = res.data.data.item
+            setTasks({...tasks, [todolistId]: tasks[todolistId].map(t => t.id === task.id ? newTask : t)})
         })
     }
 
-    const changeTaskTitleHandler = (title: string, task: any) => {
-        // update task title
+    const changeTaskTitleHandler = (taskId: string, title: string, todolistId: string) => {
+        axios.put<Response<{ item: Task }>>(`https://social-network.samuraijs.com/api/1.1/todo-lists/${todolistId}/tasks/${taskId}`,
+            {title}, {
+                headers: {
+                    Authorization: 'Bearer *************************************',
+                    'API-KEY': '*************************************',
+                },
+            }).then(() => {
+            setTasks({...tasks, [todolistId]: tasks[todolistId].map(t => t.id === taskId ? {...t, title} : t)})
+        })
     }
 
     return (
@@ -173,12 +188,12 @@ setTasks({...tasks, [todolistId]: tasks[todolistId].map(t => t.id === task.id ? 
                                 return (
                                     <div key={task.id}>
                                         <Checkbox
-                                            checked={task.status  === 2}
+                                            checked={task.status === 2}
                                             onChange={e => changeTaskStatusHandler(e, task, tl.id)}
                                         />
                                         <EditableSpan
                                             oldTitle={task.title}
-                                            changeItem={(title: string) => changeTaskTitleHandler(task.id, title)}
+                                            changeItem={(title: string) => changeTaskTitleHandler(task.id, title, tl.id)}
                                         />
                                         <button onClick={() => removeTaskHandler(task.id, tl.id)}>x</button>
                                     </div>
