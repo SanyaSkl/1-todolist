@@ -1,9 +1,8 @@
 import Box from "@mui/material/Box"
 import Button from "@mui/material/Button"
+import { FilterValuesType, TodolistType } from "app/App"
+import { useAppDispatch } from "common/hooks/useAppDispatch"
 import React from "react"
-import { useDispatch } from "react-redux"
-import { FilterValuesType, TodolistType } from "../../../../../../app/App"
-import { useAppDispatch } from "../../../../../../common/hooks/useAppDispatch"
 import { changeTodolistFilterAC } from "../../../../model/todolists-reducer"
 import { filterButtonContainerSx } from "./FilterTasksButtons.style"
 

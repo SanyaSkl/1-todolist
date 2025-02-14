@@ -1,7 +1,7 @@
 import List from "@mui/material/List"
 import { useAppSelector } from "common/hooks/useAppSelector"
 import React from "react"
-import { TodolistType } from "../../../../../../app/App"
+import { TodolistType } from "app/App"
 import { selectTasks } from "../../../../model/tasksSelectors"
 import { Task } from "../Task/Task"
 

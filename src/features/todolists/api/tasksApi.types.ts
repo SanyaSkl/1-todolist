@@ -1,6 +1,5 @@
 import { TaskPriority, TaskStatus } from "common/enums/enums"
 
-
 export type Task = {
   description: string
   title: string

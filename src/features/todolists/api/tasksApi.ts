@@ -7,12 +7,12 @@ export const tasksApi = {
     return instance.get<GetTaskResponse>(`todo-lists/${todolistId}/tasks`)
   },
 
-  createTask(payload: { title: string, todolistId: string }) {
+  createTask(payload: { title: string; todolistId: string }) {
     const { title, todolistId } = payload
     return instance.post<Response<{ item: Task }>>(`todo-lists/${todolistId}/tasks`, { title })
   },
 
-  removeTask(payload: { taskId: string, todolistId: string }) {
+  removeTask(payload: { taskId: string; todolistId: string }) {
     const { taskId, todolistId } = payload
     return instance.delete<Response>(`todo-lists/${todolistId}/tasks/${taskId}`)
   },
@@ -22,8 +22,8 @@ export const tasksApi = {
     return instance.put<Response>(`todo-lists/${todolistId}/tasks/${taskId}`, model)
   },
 
-  updateTaskTitle(payload: { taskId: string, title: string, todolistId: string }) {
+  updateTaskTitle(payload: { taskId: string; title: string; todolistId: string }) {
     const { taskId, title, todolistId } = payload
     return instance.put(`todo-lists/${todolistId}/tasks/${taskId}`, { title })
-  }
+  },
 }

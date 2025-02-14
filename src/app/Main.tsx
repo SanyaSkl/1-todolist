@@ -1,9 +1,8 @@
 import { Container } from "@mui/material"
 import Grid from "@mui/material/Grid2"
 import React from "react"
-import { useDispatch } from "react-redux"
-import { AddItemForm } from "../common/components/AddItemForm/AddItemForm"
-import { useAppDispatch } from "../common/hooks/useAppDispatch"
+import { AddItemForm } from "common/components"
+import { useAppDispatch } from "common/hooks/useAppDispatch"
 import { addTodolistAC } from "../features/todolists/model/todolists-reducer"
 import { Todolists } from "../features/todolists/ui/Todilists/Todolists"
 
