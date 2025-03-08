@@ -1,17 +1,25 @@
 import List from "@mui/material/List"
 import { useAppSelector } from "common/hooks/useAppSelector"
-import React from "react"
-import { TodolistType } from "app/App"
+import React, { useEffect } from "react"
 import { selectTasks } from "../../../../model/tasksSelectors"
 import { Task } from "../Task/Task"
+import { useAppDispatch } from "common/hooks/useAppDispatch"
+import { fetchTasksTC } from "../../../../model/task-reducer"
+import { DomainTodolist } from "../../../../model/todolists-reducer"
 
 type Props = {
-  todolist: TodolistType
+  todolist: DomainTodolist
 }
 
 export const Tasks = ({ todolist }: Props) => {
   const tasks = useAppSelector(selectTasks)
   const allTasks = tasks[todolist.id]
+
+  const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    dispatch(fetchTasksTC(todolist.id))
+  }, [])
 
   let tasksForTodolist = allTasks
 

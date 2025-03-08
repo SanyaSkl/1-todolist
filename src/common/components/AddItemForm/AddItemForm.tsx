@@ -1,4 +1,3 @@
-//import {Button} from "./Button";
 import Button from "@mui/material/Button"
 import { ChangeEvent, KeyboardEvent, useState } from "react"
 import TextField from "@mui/material/TextField"
@@ -34,7 +33,7 @@ export const AddItemForm = ({ addItem }: Props) => {
     maxWidth: "39px",
     maxHeight: "39px",
     minWidth: "39px",
-    minHeight: "39px",
+    minHeight: "39px"
   }
 
   return (

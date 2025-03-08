@@ -4,13 +4,13 @@ import { EditableSpan } from "common/components/EditableSpan/EditableSpan"
 import { TaskStatus } from "common/enums/enums"
 import React, { useEffect, useState } from "react"
 import { tasksApi } from "../features/todolists/api/tasksApi"
-import { Task, UpdateTaskModel } from "../features/todolists/api/tasksApi.types"
+import { DomainTask, UpdateTaskModel } from "../features/todolists/api/tasksApi.types"
 import { todolistsApi } from "../features/todolists/api/todolistsApi"
 import { Todolist } from "../features/todolists/api/todolistsApi.types"
 
 export const AppHttpRequests = () => {
   const [todolists, setTodolists] = useState<Todolist[]>([])
-  const [tasks, setTasks] = useState<{ [key: string]: Task[] }>({})
+  const [tasks, setTasks] = useState<{ [key: string]: DomainTask[] }>({})
 
   useEffect(() => {
     todolistsApi.getTodolistApi().then((res) => {
@@ -56,7 +56,7 @@ export const AppHttpRequests = () => {
     })
   }
 
-  const changeTaskStatusHandler = (e: React.ChangeEvent<HTMLInputElement>, task: Task) => {
+  const changeTaskStatusHandler = (e: React.ChangeEvent<HTMLInputElement>, task: DomainTask) => {
     let status = e.currentTarget.checked ? TaskStatus.Completed : TaskStatus.new
 
     const model: UpdateTaskModel = {
@@ -97,7 +97,7 @@ export const AppHttpRequests = () => {
 
             {/* Tasks */}
             {!!tasks[tl.id] &&
-              tasks[tl.id].map((task: Task) => {
+              tasks[tl.id].map((task: DomainTask) => {
                 return (
                   <div key={task.id}>
                     <Checkbox checked={task.status === 2} onChange={(e) => changeTaskStatusHandler(e, task)} />

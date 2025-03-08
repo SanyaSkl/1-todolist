@@ -5,13 +5,14 @@ import ListItem from "@mui/material/ListItem"
 import { EditableSpan } from "common/components"
 import { useAppDispatch } from "common/hooks/useAppDispatch"
 import React, { ChangeEvent } from "react"
-import { TaskType, TodolistType } from "app/App"
 import { changeTaskStatusAC, changeTaskTitleAC, removeTaskAC } from "../../../../model/task-reducer"
 import { getListItemSx } from "./Task.styles"
+import { DomainTask } from "../../../../api/tasksApi.types"
+import { DomainTodolist } from "../../../../model/todolists-reducer"
 
 type Props = {
-  task: TaskType
-  todolist: TodolistType
+  task: DomainTask
+  todolist: DomainTodolist
 }
 
 export const Task = ({ task, todolist }: Props) => {
