@@ -5,10 +5,11 @@ import ListItem from "@mui/material/ListItem"
 import { EditableSpan } from "common/components"
 import { useAppDispatch } from "common/hooks/useAppDispatch"
 import React, { ChangeEvent } from "react"
-import { changeTaskStatusAC, changeTaskTitleAC, removeTaskAC } from "../../../../model/task-reducer"
 import { getListItemSx } from "./Task.styles"
 import { DomainTask } from "../../../../api/tasksApi.types"
 import { DomainTodolist } from "../../../../model/todolists-reducer"
+import { TaskStatus } from "common/enums/enums"
+import { removeTaskTC, updateTaskTC } from "../../../../model/task-reducer"
 
 type Props = {
   task: DomainTask
@@ -19,15 +20,29 @@ export const Task = ({ task, todolist }: Props) => {
   const dispatch = useAppDispatch()
 
   const removeTaskHandler = () => {
-    dispatch(removeTaskAC({ taskId: task.id, todolistId: todolist.id }))
+    dispatch(removeTaskTC({ taskId: task.id, todolistId: todolist.id }))
   }
   const changeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    const newStatusValue = e.currentTarget.checked
-    dispatch(changeTaskStatusAC({ taskId: task.id, isDone: newStatusValue, todolistId: todolist.id }))
-  }
-  const changeTaskTitleHandler = (title: string) => {
-    dispatch(changeTaskTitleAC({ taskId: task.id, title, todolistId: todolist.id }))
-  }
+    const status = e.currentTarget.checked ? TaskStatus.Completed : TaskStatus.new;
+
+    // Вызываем один thunk для обновления статуса
+    dispatch(updateTaskTC({
+      taskId: task.id,
+      todolistId: todolist.id,
+      domainModel: { status }, // Передаем только статус
+      title: task.title // Заголовок остается прежним
+    }));
+  };
+
+  const changeTaskTitleHandler = (newTitle: string) => {
+    // Вызываем один thunk для обновления заголовка
+    dispatch(updateTaskTC({
+      taskId: task.id,
+      todolistId: todolist.id,
+      domainModel: { status: task.status }, // Статус остается прежним
+      title: newTitle // Передаем новый заголовок
+    }));
+  };
 
   return (
     <ListItem key={task.id} sx={getListItemSx(task.isDone)}>
