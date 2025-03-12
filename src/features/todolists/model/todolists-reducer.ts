@@ -83,3 +83,23 @@ export const addTodolistTC = (title: string) => (dispatch: AppDispatch) => {
     dispatch(addTodolistAC({ todolist: { ...newTodolist, filter: "all" } }))
   })
 }
+
+export const removeTodolistTC = (id: string) => (dispatch: AppDispatch) => {
+  todolistsApi.removeTodolist(id).then(() => {
+    dispatch(removeTodolistAC(id))
+  })
+}
+
+export const updateTodolistTitleTC =
+  (arg: { id: string; title: string }) => (dispatch: AppDispatch) => {
+    todolistsApi.updateTodolistTitle(arg).then(() => {
+      dispatch(changeTodolistTitleAC(arg))
+    })
+  }
+
+export const updateTodolistFilterTC =
+  (arg: { id: string; filter: FilterValuesType}) => (dispatch: AppDispatch) => {
+    todolistsApi.updateTodolistFilter(arg).then(() => {
+      dispatch(changeTodolistFilterAC(arg))
+    })
+  }

@@ -1,6 +1,7 @@
 import { instance } from "common/instance/instance"
-import { GetTaskResponse, DomainTask, UpdateTaskModel, UpdateTaskDomainModel } from "./tasksApi.types"
+import { DomainTask, GetTaskResponse } from "./tasksApi.types"
 import { Response } from "./todolistsApi.types"
+import { TaskStatus } from "common/enums/enums"
 
 export const tasksApi = {
   getTaskApi(todolistId: string) {
@@ -17,13 +18,11 @@ export const tasksApi = {
     return instance.delete<Response>(`todo-lists/${todolistId}/tasks/${taskId}`)
   },
 
-  updateTaskStatus(payload: { todolistId: string; model: UpdateTaskDomainModel; taskId: string }) {
-    const { taskId, todolistId, model } = payload
-    return instance.put<Response>(`todo-lists/${todolistId}/tasks/${taskId}`, model)
-  },
-
-  updateTaskTitle(payload: { taskId: string; title: string; todolistId: string }) {
-    const { taskId, title, todolistId } = payload
-    return instance.put(`todo-lists/${todolistId}/tasks/${taskId}`, { title })
-  },
+  updateTask(payload: { taskId: string; title?: string; status?: TaskStatus; todolistId: string }) {
+    const { taskId, title, status, todolistId } = payload
+    return instance.put<Response>(`todo-lists/${todolistId}/tasks/${taskId}`, {
+      ...(title && { title }), // Добавляем title только если он есть
+      ...(status !== undefined && { status }) // Добавляем status только если он определен
+    })
+  }
 }

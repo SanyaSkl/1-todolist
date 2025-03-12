@@ -2,7 +2,7 @@ import { ChangeEvent, useState } from "react"
 
 type Props = {
   oldTitle: string
-  changeItem: (newTitle: string) => void
+  changeItem?: (newTitle: string) => void
 }
 export const EditableSpan = ({ oldTitle, changeItem }: Props) => {
   const [editMod, setEditMode] = useState(false)
@@ -11,7 +11,9 @@ export const EditableSpan = ({ oldTitle, changeItem }: Props) => {
   const activateEditMode = () => {
     setEditMode(!editMod)
     if (editMod && newTitle.trim()) {
-      changeItem(newTitle.trim())
+      if (changeItem) {
+        changeItem(newTitle.trim())
+      }
     }
   }
 

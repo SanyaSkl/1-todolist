@@ -22,30 +22,38 @@ export const Task = ({ task, todolist }: Props) => {
   const removeTaskHandler = () => {
     dispatch(removeTaskTC({ taskId: task.id, todolistId: todolist.id }))
   }
-  const changeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    const status = e.currentTarget.checked ? TaskStatus.Completed : TaskStatus.New
+
+  const changeTaskHandler = (newTitle: string, newStatus: TaskStatus) => {
     dispatch(updateTaskTC({
       taskId: task.id,
       todolistId: todolist.id,
-      domainModel: { ...task, status },
-      title: task.title
-    }))
+      domainModel: {
+        title: newTitle,
+        status: newStatus
+      }
+    }));
+  };
+
+  const changeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    const newStatus = e.currentTarget.checked ? TaskStatus.Completed : TaskStatus.New;
+    changeTaskHandler(task.title, newStatus); // Используем changeTaskHandler
   }
 
   const changeTaskTitleHandler = (newTitle: string) => {
-    dispatch(updateTaskTC({
-      taskId: task.id,
-      todolistId: todolist.id,
-      domainModel: { ...task, status: task.status }, // Статус остается прежним
-      title: newTitle, // title передаётся отдельно
-    }));
+    changeTaskHandler(newTitle, task.status); // Используем changeTaskHandler с текущим статусом
   };
 
   return (
     <ListItem key={task.id} sx={getListItemSx(task.status === TaskStatus.Completed)}>
       <div>
-        <Checkbox checked={task.status === TaskStatus.Completed} onChange={changeTaskStatusHandler} />
-        <EditableSpan oldTitle={task.title} changeItem={changeTaskTitleHandler} />
+        <Checkbox
+          checked={task.status === TaskStatus.Completed}
+          onChange={changeTaskStatusHandler}
+        />
+        <EditableSpan
+          oldTitle={task.title}
+          changeItem={changeTaskTitleHandler}
+        />
       </div>
       <IconButton onClick={removeTaskHandler}>
         <DeleteIcon />

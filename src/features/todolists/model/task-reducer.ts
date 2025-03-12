@@ -95,15 +95,23 @@ export const addTaskTC = (arg: { title: string; todolistId: string }) => (dispat
   })
 }
 
-export const updateTaskTC =
-  (arg: { taskId: string; todolistId: string; domainModel: UpdateTaskDomainModel; title: string }) =>
-    (dispatch: AppDispatch) => {
-      const { taskId, todolistId, domainModel, title } = arg
-      tasksApi.updateTaskStatus({ taskId, todolistId, model: domainModel })
-        .then(() => {
-          dispatch(updateTaskAC({ taskId, todolistId, status: domainModel.status, title }))
-        })
-    }
+export const updateTaskTC = (arg: { taskId: string; todolistId: string; domainModel: UpdateTaskDomainModel }) => (dispatch: AppDispatch) => {
+  const { taskId, todolistId, domainModel } = arg;
+
+  tasksApi.updateTask({
+    taskId,
+    todolistId,
+    title: domainModel.title,
+    status: domainModel.status
+  }).then(() => {
+    dispatch(updateTaskAC({
+      taskId,
+      todolistId,
+      status: domainModel.status,
+      title: domainModel.title || '' // Если title не передан, можно оставить пустым
+    }));
+  });
+};
 
 // Actions types
 export type RemoveTaskActionType = ReturnType<typeof removeTaskAC>
