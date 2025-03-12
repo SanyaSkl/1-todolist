@@ -1,7 +1,7 @@
 import { AddItemForm } from "common/components"
 import { useAppDispatch } from "common/hooks/useAppDispatch"
 import { FilterTasksButtons } from "./FilterTasksButton/FilterTasksButtons"
-import { addTaskAC, addTaskTC } from "../../../model/task-reducer"
+import { addTaskTC } from "../../../model/task-reducer"
 import { Tasks } from "./Tasks/Tasks"
 import { TodolistTitle } from "./TodolistTitle/TodolistTitle"
 import { DomainTodolist } from "../../../model/todolists-reducer"
@@ -16,6 +16,7 @@ export const Todolist = ({ todolist }: PropsType) => {
   const addTaskHandler = (title: string) => {
     dispatch(addTaskTC({ todolistId: todolist.id, title }))
   }
+
 
   return (
     <div>

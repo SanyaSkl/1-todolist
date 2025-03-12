@@ -57,7 +57,7 @@ export const AppHttpRequests = () => {
   }
 
   const changeTaskStatusHandler = (e: React.ChangeEvent<HTMLInputElement>, task: DomainTask) => {
-    let status = e.currentTarget.checked ? TaskStatus.Completed : TaskStatus.new
+    let status = e.currentTarget.checked ? TaskStatus.Completed : TaskStatus.New
 
     const model: UpdateTaskModel = {
       description: task.description,

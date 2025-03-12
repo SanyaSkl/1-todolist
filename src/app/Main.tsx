@@ -3,14 +3,14 @@ import Grid from "@mui/material/Grid2"
 import React from "react"
 import { AddItemForm } from "common/components"
 import { useAppDispatch } from "common/hooks/useAppDispatch"
-import { addTodolistAC } from "../features/todolists/model/todolists-reducer"
 import { Todolists } from "../features/todolists/ui/Todilists/Todolists"
+import { addTodolistTC } from "../features/todolists/model/todolists-reducer"
 
 export const Main = () => {
   const dispatch = useAppDispatch()
 
   const addTodolist = (title: string) => {
-    dispatch(addTodolistAC(title))
+    dispatch(addTodolistTC(title))
   }
 
   return (

@@ -6,6 +6,7 @@ import { Task } from "../Task/Task"
 import { useAppDispatch } from "common/hooks/useAppDispatch"
 import { fetchTasksTC } from "../../../../model/task-reducer"
 import { DomainTodolist } from "../../../../model/todolists-reducer"
+import { TaskStatus } from "common/enums/enums"
 
 type Props = {
   todolist: DomainTodolist
@@ -24,10 +25,10 @@ export const Tasks = ({ todolist }: Props) => {
   let tasksForTodolist = allTasks
 
   if (todolist.filter === "active") {
-    tasksForTodolist = allTasks.filter((task) => !task.isDone)
+    tasksForTodolist = allTasks.filter((task) => task.status === TaskStatus.New)
   }
   if (todolist.filter === "completed") {
-    tasksForTodolist = allTasks.filter((task) => task.isDone)
+    tasksForTodolist = allTasks.filter((task) => task.status === TaskStatus.Completed)
   }
 
   return (
