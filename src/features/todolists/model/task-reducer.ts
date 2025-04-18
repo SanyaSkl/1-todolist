@@ -2,7 +2,9 @@ import { AddTodolistActionType, RemoveTodolistActionType } from "./todolists-red
 import { tasksApi } from "../api/tasksApi"
 import { DomainTask, UpdateTaskDomainModel } from "../api/tasksApi.types"
 import { AppDispatch } from "app/store"
-import { TaskStatus } from "common/enums/enums"
+import { ResultCode, TaskStatus } from "common/enums/enums"
+import { setAppErrorAC, setAppStatusAC } from "app/app-reducer"
+import { handleHttpErrors } from "common/handleHttpErrors"
 
 export type TasksStateType = {
   [key: string]: DomainTask[]
@@ -77,41 +79,59 @@ export const updateTaskAC = (payload: { taskId: string; todolistId: string; stat
 
 // Thunk
 export const fetchTasksTC = (todolistId: string) => (dispatch: AppDispatch) => {
+  dispatch(setAppStatusAC("loading"))
   tasksApi.getTaskApi(todolistId).then((res) => {
     const tasks = res.data.items
+    dispatch(setAppStatusAC("succeeded"))
     dispatch(setTasksAC({ todolistId, tasks }))
   })
 }
 
 export const removeTaskTC = (arg: { taskId: string; todolistId: string }) => (dispatch: AppDispatch) => {
+  dispatch(setAppStatusAC("loading"))
   tasksApi.removeTask(arg).then(() => {
+    dispatch(setAppStatusAC("succeeded"))
     dispatch(removeTaskAC(arg))
   })
 }
 
 export const addTaskTC = (arg: { title: string; todolistId: string }) => (dispatch: AppDispatch) => {
+  dispatch(setAppStatusAC("loading"))
   tasksApi.createTask(arg).then((res) => {
-    dispatch(addTaskAC({ task: res.data.data.item }))
+    if (res.data.resultCode === ResultCode.Success) {
+      dispatch(addTaskAC({ task: res.data.data.item }))
+      dispatch(setAppStatusAC("succeeded"))
+    } else {
+      dispatch(setAppErrorAC(res.data.messages.length ? res.data.messages[0] : "Some error occurred"))
+      dispatch(setAppStatusAC("failed"))
+    }
   })
+    .catch((err) => {
+      handleHttpErrors(err, dispatch)
+    })
+    // .finally(() => {
+    //   dispatch(setAppStatusAC("idle"))
+    // })
 }
 
-export const updateTaskTC = (arg: { taskId: string; todolistId: string; domainModel: UpdateTaskDomainModel }) => (dispatch: AppDispatch) => {
-  const { taskId, todolistId, domainModel } = arg;
+export const updateTaskTC = (arg: { taskId: string; todolistId: string; domainModel: UpdateTaskDomainModel }) =>
+  (dispatch: AppDispatch) => {
+    const { taskId, todolistId, domainModel } = arg
 
-  tasksApi.updateTask({
-    taskId,
-    todolistId,
-    title: domainModel.title,
-    status: domainModel.status
-  }).then(() => {
-    dispatch(updateTaskAC({
+    tasksApi.updateTask({
       taskId,
       todolistId,
-      status: domainModel.status,
-      title: domainModel.title || '' // Если title не передан, можно оставить пустым
-    }));
-  });
-};
+      title: domainModel.title,
+      status: domainModel.status
+    }).then(() => {
+      dispatch(updateTaskAC({
+        taskId,
+        todolistId,
+        status: domainModel.status,
+        title: domainModel.title || "" // Если title не передан, можно оставить пустым
+      }))
+    })
+  }
 
 // Actions types
 export type RemoveTaskActionType = ReturnType<typeof removeTaskAC>

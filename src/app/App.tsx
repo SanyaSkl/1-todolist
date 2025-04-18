@@ -9,26 +9,27 @@ import { useEffect } from "react"
 import { fetchTodolistsTC } from "../features/todolists/model/todolists-reducer"
 import { useAppDispatch } from "common/hooks/useAppDispatch"
 import { DomainTask } from "../features/todolists/api/tasksApi.types"
+import { ErrorSnackbar } from "common/components/ErrorSnackbar"
 
 export type TasksStateType = {
   [key: string]: DomainTask[]
 }
 
-function App() {
+export const App = () => {
   const dispatch = useAppDispatch()
   useEffect(() => {
     dispatch(fetchTodolistsTC)
   }, [])
   const themeMode = useAppSelector(selectTheme)
 
-  const theme = getTheme(themeMode)
+
+  //const theme = getTheme(themeMode)
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={getTheme(themeMode)}>
       <CssBaseline />
       <Header />
       <Main />
+      <ErrorSnackbar/>
     </ThemeProvider>
   )
 }
-
-export default App

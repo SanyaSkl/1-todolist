@@ -4,9 +4,9 @@ import { ThemeMode } from "app/app-reducer"
 export const getTheme = (themeMode: ThemeMode) => {
   return createTheme({
     palette: {
-      mode: themeMode,
+      mode: themeMode === "light" ? "light" : "dark",
       primary: {
-        main: "#505383",
+        main: "#087EA4",
       },
     },
   })
