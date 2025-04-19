@@ -101,6 +101,7 @@ export const fetchTodolistsTC = () => (dispatch: AppDispatch) => {
 
 export const addTodolistTC = (title: string) => (dispatch: AppDispatch) => {
   dispatch(setAppStatusAC("loading"))
+
   todolistsApi.createTodolist(title).then((res) => {
     if (res.data.resultCode === ResultCode.Success) {
       const newTodolist = (res.data.data.item)
@@ -137,14 +138,18 @@ export const removeTodolistTC = (id: string) => (dispatch: AppDispatch) => {
 
 export const updateTodolistTitleTC =
   (arg: { id: string; title: string }) => (dispatch: AppDispatch) => {
+    dispatch(setAppStatusAC("loading"))
     todolistsApi.updateTodolistTitle(arg).then(() => {
+      dispatch(setAppStatusAC("succeeded"))
       dispatch(changeTodolistTitleAC(arg))
     })
   }
 
 export const updateTodolistFilterTC =
   (arg: { id: string; filter: FilterValuesType }) => (dispatch: AppDispatch) => {
+    dispatch(setAppStatusAC("loading"))
     todolistsApi.updateTodolistFilter(arg).then(() => {
+      dispatch(setAppStatusAC("succeeded"))
       dispatch(changeTodolistFilterAC(arg))
     })
   }

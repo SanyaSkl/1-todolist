@@ -54,4 +54,3 @@ export type SetAppStatusActionType = ReturnType<typeof setAppStatusAC>
 export type SetAppErrorActionType = ReturnType<typeof setAppErrorAC>
 
 export type ActionsType = SwitchThemeActionType | SetAppStatusActionType | SetAppErrorActionType
-

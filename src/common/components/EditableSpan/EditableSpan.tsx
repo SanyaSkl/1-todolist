@@ -3,8 +3,9 @@ import { ChangeEvent, useState } from "react"
 type Props = {
   oldTitle: string
   changeItem?: (newTitle: string) => void
+  disable?: boolean
 }
-export const EditableSpan = ({ oldTitle, changeItem }: Props) => {
+export const EditableSpan = ({ oldTitle, changeItem, disable }: Props) => {
   const [editMod, setEditMode] = useState(false)
   const [newTitle, setNewTitle] = useState(oldTitle)
 
@@ -22,7 +23,7 @@ export const EditableSpan = ({ oldTitle, changeItem }: Props) => {
   }
 
   return editMod ? (
-    <input value={newTitle} onBlur={activateEditMode} autoFocus onChange={changeTitleHandler} />
+    <input value={newTitle} onBlur={activateEditMode} autoFocus onChange={changeTitleHandler} disabled={disable} />
   ) : (
     <span onDoubleClick={activateEditMode}>{oldTitle}</span>
   )

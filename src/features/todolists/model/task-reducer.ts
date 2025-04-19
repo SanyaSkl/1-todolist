@@ -89,10 +89,18 @@ export const fetchTasksTC = (todolistId: string) => (dispatch: AppDispatch) => {
 
 export const removeTaskTC = (arg: { taskId: string; todolistId: string }) => (dispatch: AppDispatch) => {
   dispatch(setAppStatusAC("loading"))
-  tasksApi.removeTask(arg).then(() => {
-    dispatch(setAppStatusAC("succeeded"))
-    dispatch(removeTaskAC(arg))
+  tasksApi.removeTask(arg).then((res) => {
+    if (res.data.resultCode === ResultCode.Success) {
+      dispatch(setAppStatusAC("succeeded"))
+      dispatch(removeTaskAC(arg))
+    } else {
+      dispatch(setAppErrorAC(res.data.messages.length ? res.data.messages[0] : "Some error occurred"))
+      dispatch(setAppStatusAC("failed"))
+    }
   })
+    .catch((err) => {
+      handleHttpErrors(err, dispatch)
+    })
 }
 
 export const addTaskTC = (arg: { title: string; todolistId: string }) => (dispatch: AppDispatch) => {
@@ -109,28 +117,37 @@ export const addTaskTC = (arg: { title: string; todolistId: string }) => (dispat
     .catch((err) => {
       handleHttpErrors(err, dispatch)
     })
-    // .finally(() => {
-    //   dispatch(setAppStatusAC("idle"))
-    // })
+  // .finally(() => {
+  //   dispatch(setAppStatusAC("idle"))
+  // })
 }
 
 export const updateTaskTC = (arg: { taskId: string; todolistId: string; domainModel: UpdateTaskDomainModel }) =>
   (dispatch: AppDispatch) => {
     const { taskId, todolistId, domainModel } = arg
-
+    dispatch(setAppStatusAC("loading"))
     tasksApi.updateTask({
       taskId,
       todolistId,
       title: domainModel.title,
       status: domainModel.status
-    }).then(() => {
-      dispatch(updateTaskAC({
-        taskId,
-        todolistId,
-        status: domainModel.status,
-        title: domainModel.title || "" // Если title не передан, можно оставить пустым
-      }))
+    }).then((res) => {
+      if (res.data.resultCode === ResultCode.Success) {
+        dispatch(updateTaskAC({
+          taskId,
+          todolistId,
+          status: domainModel.status,
+          title: domainModel.title || "" // Если title не передан, можно оставить пустым
+        }))
+        dispatch(setAppStatusAC("succeeded"))
+      } else {
+        dispatch(setAppErrorAC(res.data.messages.length ? res.data.messages[0] : "Some error occurred"))
+        dispatch(setAppStatusAC("failed"))
+      }
     })
+      .catch((err) => {
+        handleHttpErrors(err, dispatch)
+      })
   }
 
 // Actions types

@@ -14,9 +14,10 @@ import { removeTaskTC, updateTaskTC } from "../../../../model/task-reducer"
 type Props = {
   task: DomainTask
   todolist: DomainTodolist
+  disabled?: boolean
 }
 
-export const Task = ({ task, todolist }: Props) => {
+export const Task = ({ task, todolist, disabled }: Props) => {
   const dispatch = useAppDispatch()
 
   const removeTaskHandler = () => {
@@ -49,13 +50,15 @@ export const Task = ({ task, todolist }: Props) => {
         <Checkbox
           checked={task.status === TaskStatus.Completed}
           onChange={changeTaskStatusHandler}
+          disabled={disabled}
         />
         <EditableSpan
           oldTitle={task.title}
           changeItem={changeTaskTitleHandler}
+          disable={disabled}
         />
       </div>
-      <IconButton onClick={removeTaskHandler}>
+      <IconButton onClick={removeTaskHandler} disabled={disabled}>
         <DeleteIcon />
       </IconButton>
     </ListItem>
