@@ -6,10 +6,10 @@ import { EditableSpan } from "common/components"
 import { useAppDispatch } from "common/hooks/useAppDispatch"
 import React, { ChangeEvent } from "react"
 import { getListItemSx } from "./Task.styles"
-import { DomainTask } from "../../../../api/tasksApi.types"
-import { DomainTodolist } from "../../../../model/todolists-reducer"
+import { DomainTask } from "../../../../../api/tasksApi.types"
+import { DomainTodolist } from "../../../../../model/todolists-reducer"
 import { TaskStatus } from "common/enums/enums"
-import { removeTaskTC, updateTaskTC } from "../../../../model/task-reducer"
+import { removeTaskTC, updateTaskTC } from "../../../../../model/task-reducer"
 
 type Props = {
   task: DomainTask

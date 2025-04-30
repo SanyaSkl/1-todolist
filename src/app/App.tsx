@@ -1,35 +1,49 @@
-import { CssBaseline } from "@mui/material"
+import { CircularProgress, CssBaseline } from "@mui/material"
 import { ThemeProvider } from "@mui/material/styles"
 import { Header } from "common/components/Header/Header"
 import { useAppSelector } from "common/hooks/useAppSelector"
 import { getTheme } from "common/theme/theme"
 import { selectTheme } from "./appSelectors"
-import { Main } from "./Main"
 import { useEffect } from "react"
-import { fetchTodolistsTC } from "../features/todolists/model/todolists-reducer"
 import { useAppDispatch } from "common/hooks/useAppDispatch"
 import { DomainTask } from "../features/todolists/api/tasksApi.types"
-import { ErrorSnackbar } from "common/components/ErrorSnackbar"
+import { ErrorSnackbar } from "common/components/ErrorSnackbar/ErrorSnackbar"
+import { Routing } from "common/routing/Routing"
+import { initializeAppTC } from "../features/todolists/auth/model/auth-reducer"
+import { selectIsInitialized } from "../features/todolists/auth/api/authSelectors"
+import s from "./App.module.css"
 
 export type TasksStateType = {
   [key: string]: DomainTask[]
 }
 
 export const App = () => {
-  const dispatch = useAppDispatch()
-  useEffect(() => {
-    dispatch(fetchTodolistsTC)
-  }, [])
   const themeMode = useAppSelector(selectTheme)
+  const isInitialized = useAppSelector(selectIsInitialized)
+
+  const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    dispatch(initializeAppTC())
+  }, [])
 
 
   //const theme = getTheme(themeMode)
   return (
     <ThemeProvider theme={getTheme(themeMode)}>
       <CssBaseline />
-      <Header />
-      <Main />
-      <ErrorSnackbar/>
+      {isInitialized && (
+        <>
+          <Header />
+          <Routing />
+        </>
+      )}
+      {(!isInitialized) && (
+        <div className={s.circularProgressContainer}>
+          <CircularProgress size={150} thickness={3} />
+        </div>
+      )}
+      <ErrorSnackbar />
     </ThemeProvider>
   )
 }

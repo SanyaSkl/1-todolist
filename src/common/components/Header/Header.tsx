@@ -11,29 +11,33 @@ import { useAppSelector } from "../../hooks/useAppSelector"
 import { getTheme } from "../../theme/theme"
 import { MenuButton } from "../MenuButton/MenuButton"
 import { LinearProgress } from "@mui/material"
+import { selectIsLoggedIn } from "../../../features/todolists/auth/api/authSelectors"
+import { logoutTC } from "../../../features/todolists/auth/model/auth-reducer"
 
 export const Header = () => {
   const themeMode = useAppSelector(selectTheme)
-  const theme = getTheme(themeMode)
-
   const status = useAppSelector(selectStatus)
+  const isLoggedIn = useAppSelector(selectIsLoggedIn)
 
+  const theme = getTheme(themeMode)
   const dispatch = useAppDispatch()
 
   const changeModeHandler = () => {
     dispatch(switchThemeAC(themeMode === "light" ? "dark" : "light"))
   }
 
+  const logoutHandler = () => {
+    dispatch(logoutTC())
+  }
+
   return (
     <AppBar position="static" sx={{ mb: "30px" }}>
       <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
-
         <IconButton color="inherit">
           <MenuIcon />
         </IconButton>
         <div>
-          <MenuButton>Login</MenuButton>
-          <MenuButton>Logout</MenuButton>
+          {isLoggedIn && <MenuButton onClick={logoutHandler}>Logout</MenuButton>}
           <MenuButton background={theme.palette.primary.dark}>FAQ</MenuButton>
           <Switch color={"default"} onChange={changeModeHandler} />
         </div>

@@ -6,7 +6,7 @@ import {
   DomainTodolist,
   FilterValuesType,
   updateTodolistFilterTC
-} from "../../../../model/todolists-reducer"
+} from "../../../../../model/todolists-reducer"
 import { filterButtonContainerSx } from "./FilterTasksButtons.style"
 
 type Props = {
