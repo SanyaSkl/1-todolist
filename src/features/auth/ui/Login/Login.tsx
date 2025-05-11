@@ -9,11 +9,11 @@ import { getTheme } from "common/theme/theme"
 import { useAppSelector } from "common/hooks/useAppSelector"
 import { selectTheme } from "app/appSelectors"
 import Grid from "@mui/material/Grid2"
-import { SubmitHandler, useForm, Controller } from "react-hook-form"
+import { Controller, SubmitHandler, useForm } from "react-hook-form"
 import s from "./Login.module.css"
-import { loginTC } from "../../model/auth-reducer"
+import { loginTC } from "../../model/authSlice"
 import { useAppDispatch } from "common/hooks/useAppDispatch"
-import { selectIsLoggedIn } from "../../api/authSelectors"
+import { selectIsLoggedIn } from "../../model/authSelectors"
 import { useNavigate } from "react-router"
 import { useEffect } from "react"
 import { Path } from "common/routing/Routing"
@@ -81,15 +81,26 @@ export const Login = () => {
                 label="Email"
                 margin="normal"
                 error={!!errors.email}
-                {...register('email', {
-                  required: 'Email is required',
+                {...register("email", {
+                  required: "Email is required",
                   pattern: {
                     value: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
-                    message: 'Incorrect email address',
-                  },
+                    message: "Incorrect email address"
+                  }
                 })} />
               {errors.email && <span className={s.errorMessage}>{errors.email.message}</span>}
-              <TextField type="password" label="Password" margin="normal" {...register("password")} />
+              <TextField
+                type="password"
+                label="Password"
+                margin="normal"
+                {...register("password", {
+                  required: "Password is required",
+                  pattern: {
+                    value: /^.{4,}$/,
+                    message: "Password must be at least 3 characters long"
+                  }
+                })} />
+              {errors.password && <span className={s.errorMessage}>{errors.password.message}</span>}
               <FormControlLabel
                 label={"Remember me"}
                 control={
