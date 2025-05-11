@@ -11,8 +11,8 @@ import { useAppSelector } from "../../hooks/useAppSelector"
 import { getTheme } from "../../theme/theme"
 import { MenuButton } from "../MenuButton/MenuButton"
 import { LinearProgress } from "@mui/material"
-import { selectIsLoggedIn } from "../../../features/todolists/auth/api/authSelectors"
-import { logoutTC } from "../../../features/todolists/auth/model/auth-reducer"
+import { selectIsLoggedIn } from "../../../features/auth/model/authSelectors"
+import { logoutTC } from "../../../features/auth/model/authSlice"
 
 export const Header = () => {
   const themeMode = useAppSelector(selectTheme)

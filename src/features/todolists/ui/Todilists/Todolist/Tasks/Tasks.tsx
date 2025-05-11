@@ -1,11 +1,11 @@
 import List from "@mui/material/List"
 import { useAppSelector } from "common/hooks/useAppSelector"
 import React, { useEffect } from "react"
-import { selectTasks } from "../../../../../model/tasksSelectors"
-import { Task } from "../Task/Task"
+import { selectTasks } from "../../../../model/tasksSelectors"
+import { Task } from "./Task/Task"
 import { useAppDispatch } from "common/hooks/useAppDispatch"
-import { fetchTasksTC } from "../../../../../model/task-reducer"
-import { DomainTodolist } from "../../../../../model/todolists-reducer"
+import { fetchTasksTC } from "../../../../model/task-reducer"
+import { DomainTodolist } from "../../../../model/todolists-reducer"
 import { TaskStatus } from "common/enums/enums"
 
 type Props = {

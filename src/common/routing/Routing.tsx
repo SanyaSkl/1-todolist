@@ -1,6 +1,6 @@
 import { Route, Routes } from "react-router"
 import { Main } from "app/Main"
-import { Login } from "../../features/todolists/auth/ui/Login"
+import { Login } from "../../features/auth/ui/Login"
 import { Page404 } from "common/components/Page404/Page404"
 
 

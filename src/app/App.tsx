@@ -9,8 +9,8 @@ import { useAppDispatch } from "common/hooks/useAppDispatch"
 import { DomainTask } from "../features/todolists/api/tasksApi.types"
 import { ErrorSnackbar } from "common/components/ErrorSnackbar/ErrorSnackbar"
 import { Routing } from "common/routing/Routing"
-import { initializeAppTC } from "../features/todolists/auth/model/auth-reducer"
-import { selectIsInitialized } from "../features/todolists/auth/api/authSelectors"
+import { initializeAppTC } from "../features/auth/model/authSlice"
+import { selectIsInitialized } from "../features/auth/model/authSelectors"
 import s from "./App.module.css"
 
 export type TasksStateType = {
