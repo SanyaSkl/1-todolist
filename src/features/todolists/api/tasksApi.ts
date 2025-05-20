@@ -1,6 +1,5 @@
 import { instance } from "common/instance/instance"
-import { DomainTask, GetTaskResponse } from "./tasksApi.types"
-import { TaskStatus } from "common/enums/enums"
+import { DomainTask, GetTaskResponse, UpdateTaskModel } from "./tasksApi.types"
 import { BaseResponse } from "common/types"
 
 export const tasksApi = {
@@ -18,11 +17,8 @@ export const tasksApi = {
     return instance.delete<BaseResponse>(`todo-lists/${todolistId}/tasks/${taskId}`)
   },
 
-  updateTask(payload: { taskId: string; title?: string; status?: TaskStatus; todolistId: string }) {
-    const { taskId, title, status, todolistId } = payload
-    return instance.put<BaseResponse>(`todo-lists/${todolistId}/tasks/${taskId}`, {
-      ...(title && { title }), // Добавляем title только если он есть
-      ...(status !== undefined && { status }) // Добавляем status только если он определен
-    })
+  updateTask(payload: { todolistId: string; taskId: string; model: UpdateTaskModel }) {
+    const { taskId, todolistId, model } = payload
+    return instance.put<BaseResponse<{ item: DomainTask }>>(`todo-lists/${todolistId}/tasks/${taskId}`, model)
   }
 }

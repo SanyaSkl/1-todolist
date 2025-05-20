@@ -4,26 +4,25 @@ import IconButton from "@mui/material/IconButton"
 import Switch from "@mui/material/Switch"
 import Toolbar from "@mui/material/Toolbar"
 import React from "react"
-import { switchThemeAC } from "app/app-reducer"
-import { selectStatus, selectTheme } from "app/appSelectors"
 import { useAppDispatch } from "../../hooks/useAppDispatch"
 import { useAppSelector } from "../../hooks/useAppSelector"
 import { getTheme } from "../../theme/theme"
-import { MenuButton } from "../MenuButton/MenuButton"
+import { MenuButton } from "common/components"
 import { LinearProgress } from "@mui/material"
-import { selectIsLoggedIn } from "../../../features/auth/model/authSelectors"
-import { logoutTC } from "../../../features/auth/model/authSlice"
+import { logoutTC, selectIsLoggedIn } from "../../../features/auth/model/authSlice"
+import { changeTheme, selectAppStatus, selectThemeMode } from "app/appSlice"
+
 
 export const Header = () => {
-  const themeMode = useAppSelector(selectTheme)
-  const status = useAppSelector(selectStatus)
+  const themeMode = useAppSelector(selectThemeMode)
+  const status = useAppSelector(selectAppStatus)
   const isLoggedIn = useAppSelector(selectIsLoggedIn)
 
   const theme = getTheme(themeMode)
   const dispatch = useAppDispatch()
 
   const changeModeHandler = () => {
-    dispatch(switchThemeAC(themeMode === "light" ? "dark" : "light"))
+    dispatch(changeTheme({ themeMode: themeMode === "light" ? "dark" : "light" }))
   }
 
   const logoutHandler = () => {

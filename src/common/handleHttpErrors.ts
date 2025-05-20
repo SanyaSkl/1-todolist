@@ -1,10 +1,9 @@
-import { setAppErrorAC, setAppStatusAC } from "app/app-reducer"
+import { setAppError, setAppStatus } from "app/appSlice"
 import { AppDispatch } from "app/store"
 
 
-export const handleHttpErrors = (err: {message: string}, dispatch: AppDispatch) => {
+export const handleHttpErrors = ( dispatch: AppDispatch, err: { message: string }) => {
 
-
-  dispatch(setAppErrorAC(err.message))
-  dispatch(setAppStatusAC("failed"))
+  dispatch(setAppError({ error: err.message }))
+  dispatch(setAppStatus({ status: "failed" }))
 }

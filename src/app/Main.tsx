@@ -4,11 +4,12 @@ import React, { useEffect } from "react"
 import { AddItemForm } from "common/components"
 import { useAppDispatch } from "common/hooks/useAppDispatch"
 import { Todolists } from "../features/todolists/ui/Todilists/Todolists"
-import { addTodolistTC } from "../features/todolists/model/todolists-reducer"
-import { selectIsLoggedIn } from "../features/auth/model/authSelectors"
+import { addTodolistTC } from "../features/todolists/model/todolistsSlice"
+
 import { useAppSelector } from "common/hooks/useAppSelector"
 import { useNavigate } from "react-router"
 import { Path } from "common/routing/Routing"
+import { selectIsLoggedIn } from "features/auth/model/authSlice"
 
 export const Main = () => {
   const dispatch = useAppDispatch()

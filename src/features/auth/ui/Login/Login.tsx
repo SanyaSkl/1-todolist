@@ -7,16 +7,15 @@ import FormLabel from "@mui/material/FormLabel"
 import TextField from "@mui/material/TextField"
 import { getTheme } from "common/theme/theme"
 import { useAppSelector } from "common/hooks/useAppSelector"
-import { selectTheme } from "app/appSelectors"
 import Grid from "@mui/material/Grid2"
 import { Controller, SubmitHandler, useForm } from "react-hook-form"
 import s from "./Login.module.css"
-import { loginTC } from "../../model/authSlice"
+import { loginTC, selectIsLoggedIn } from "../../model/authSlice"
 import { useAppDispatch } from "common/hooks/useAppDispatch"
-import { selectIsLoggedIn } from "../../model/authSelectors"
 import { useNavigate } from "react-router"
 import { useEffect } from "react"
 import { Path } from "common/routing/Routing"
+import { selectThemeMode } from "app/appSlice"
 
 
 type Inputs = {
@@ -26,7 +25,7 @@ type Inputs = {
 }
 
 export const Login = () => {
-  const themeMode = useAppSelector(selectTheme)
+  const themeMode = useAppSelector(selectThemeMode)
   const theme = getTheme(themeMode)
   const dispatch = useAppDispatch()
   const isLoggedIn = useAppSelector(selectIsLoggedIn)
