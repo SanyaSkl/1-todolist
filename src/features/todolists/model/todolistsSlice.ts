@@ -6,7 +6,6 @@ import { ResultCode } from "common/enums/enums"
 import { handleHttpErrors } from "common/handleHttpErrors"
 import { handleServerAppError } from "common/handleServerAppError"
 import { createSlice } from "@reduxjs/toolkit"
-import { selectTodolists } from "./todolistsSelectors"
 
 export type FilterValuesType = "all" | "active" | "completed"
 
@@ -60,7 +59,7 @@ export const todolistsSlice = createSlice({
     clearTodolists: create.reducer(() => {
       return []
     })
-  }),
+  })
   // selectors: {
   //   selectTodolists: (state) => state.todolists
   // }
