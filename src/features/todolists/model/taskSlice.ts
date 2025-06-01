@@ -1,13 +1,13 @@
 import { tasksApi } from "../api/tasksApi"
 import { DomainTask, UpdateTaskDomainModel, UpdateTaskModel } from "../api/tasksApi.types"
-import { AppDispatch, RootState } from "app/store"
 import { ResultCode } from "common/enums/enums"
 import { setAppStatus } from "app/appSlice"
-import { handleHttpErrors } from "common/handleHttpErrors"
-import { handleServerAppError } from "common/handleServerAppError"
+import { handleServerNetworkError } from "common/utils/handleServerNetworkError"
+import { handleServerAppError } from "common/utils/handleServerAppError"
 import { createSlice } from "@reduxjs/toolkit"
 import { addTodolist, removeTodolist } from "./todolistsSlice"
-import { Dispatch } from "redux"
+import { AppDispatch, RootState } from "app/store"
+
 
 export type TasksStateType = {
   [key: string]: DomainTask[]
@@ -20,9 +20,9 @@ export const tasksSlice = createSlice({
     setTasks: create.reducer<{ todolistId: string; tasks: DomainTask[] }>((state, action) => {
       state[action.payload.todolistId] = action.payload.tasks
     }),
-    removeTask: create.reducer<{ todolistId: string; taskId: string }>((state, action) => {
+    removeTask: create.reducer<{ taskId: string; todolistId: string }>((state, action) => {
       const tasks = state[action.payload.todolistId]
-      const index = tasks.findIndex(task => task.id === action.payload.taskId)
+      const index = tasks.findIndex((t) => t.id === action.payload.taskId)
       if (index !== -1) {
         tasks.splice(index, 1)
       }
@@ -31,18 +31,19 @@ export const tasksSlice = createSlice({
       const tasks = state[action.payload.task.todoListId]
       tasks.unshift(action.payload.task)
     }),
-    updateTask: create.reducer<{ taskId: string; todolistId: string; domainModel: UpdateTaskDomainModel }>((state, action) => {
-      const tasks = state[action.payload.todolistId]
-      const index = tasks.findIndex(task => task.id === action.payload.taskId)
-      if (index !== -1) {
-        tasks[index] = { ...tasks[index], ...action.payload.domainModel }
+    updateTask: create.reducer<{ taskId: string; todolistId: string; domainModel: UpdateTaskDomainModel }>(
+      (state, action) => {
+        const tasks = state[action.payload.todolistId]
+        const index = tasks.findIndex((t) => t.id === action.payload.taskId)
+        if (index !== -1) {
+          tasks[index] = { ...tasks[index], ...action.payload.domainModel }
+        }
       }
-    }),
+    ),
     clearTasks: create.reducer(() => {
       return {}
     })
   }),
-
   extraReducers: (builder) => {
     builder
       .addCase(addTodolist, (state, action) => {
@@ -52,19 +53,19 @@ export const tasksSlice = createSlice({
         delete state[action.payload.id]
       })
   },
-  // selectors: {
-  //   selectTasks: (state) => state.tasks
-  // }
+  selectors: {
+    selectTasks: (state) => state
+  }
 })
 
 export const {
   addTask,
   removeTask,
-  setTasks,
   updateTask,
-  clearTasks
+  clearTasks,
+  setTasks
 } = tasksSlice.actions
-// export const {selectTasks} = tasksSlice.selectors
+export const { selectTasks } = tasksSlice.selectors
 export const tasksReducer = tasksSlice.reducer
 
 // Thunk
@@ -77,7 +78,7 @@ export const fetchTasksTC = (todolistId: string) => (dispatch: AppDispatch) => {
   })
 }
 
-export const removeTaskTC = (arg: { taskId: string; todolistId: string }) => (dispatch: AppDispatch) => {
+export const removeTaskTC = (arg: { todolistId: string; taskId: string; }) => (dispatch: AppDispatch) => {
   dispatch(setAppStatus({ status: "loading" }))
   tasksApi.removeTask(arg).then((res) => {
     if (res.data.resultCode === ResultCode.Success) {
@@ -88,7 +89,7 @@ export const removeTaskTC = (arg: { taskId: string; todolistId: string }) => (di
     }
   })
     .catch((err) => {
-      handleHttpErrors(dispatch, err)
+      handleServerNetworkError(dispatch, err)
     })
 }
 
@@ -103,7 +104,7 @@ export const addTaskTC = (arg: { title: string; todolistId: string }) => (dispat
     }
   })
     .catch((err) => {
-      handleHttpErrors(dispatch, err)
+      handleServerNetworkError(dispatch, err)
     })
   // .finally(() => {
   //   dispatch(setAppStatusAC("idle"))
@@ -112,7 +113,7 @@ export const addTaskTC = (arg: { title: string; todolistId: string }) => (dispat
 
 export const updateTaskTC =
   (arg: { taskId: string; todolistId: string; domainModel: UpdateTaskDomainModel }) =>
-    (dispatch: Dispatch, getState: () => RootState) => {
+    (dispatch: AppDispatch, getState: () => RootState) => {
       const { taskId, todolistId, domainModel } = arg
 
       const allTasksFromState = getState().tasks

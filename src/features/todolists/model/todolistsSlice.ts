@@ -3,8 +3,8 @@ import { AppDispatch } from "app/store"
 import { todolistsApi } from "../api/todolistsApi"
 import { RequestStatus, setAppStatus } from "app/appSlice"
 import { ResultCode } from "common/enums/enums"
-import { handleHttpErrors } from "common/handleHttpErrors"
-import { handleServerAppError } from "common/handleServerAppError"
+import { handleServerNetworkError } from "common/utils/handleServerNetworkError"
+import { handleServerAppError } from "common/utils/handleServerAppError"
 import { createSlice } from "@reduxjs/toolkit"
 
 export type FilterValuesType = "all" | "active" | "completed"
@@ -19,7 +19,7 @@ export const todolistsSlice = createSlice({
   initialState: [] as DomainTodolist[],
   reducers: (create) => ({
     removeTodolist: create.reducer<{ id: string }>((state, action) => {
-
+      // как было раньше:
       // return state.filter((tl) => tl.id !== action.payload.id
 
       const index = state.findIndex(todo => todo.id === action.payload.id)
@@ -50,6 +50,7 @@ export const todolistsSlice = createSlice({
       }
     }),
     setTodolists: create.reducer<{ todolists: Todolist[] }>((state, action) => {
+      // как было раньше:
       // return state.map((tl) => ({ ...tl, filter: "all", entityStatus: "idle" }))
 
       action.payload.todolists.forEach((tl) => {
@@ -59,10 +60,10 @@ export const todolistsSlice = createSlice({
     clearTodolists: create.reducer(() => {
       return []
     })
-  })
-  // selectors: {
-  //   selectTodolists: (state) => state.todolists
-  // }
+  }),
+  selectors: {
+    selectTodolists: (state) => state
+  }
 })
 
 export const {
@@ -74,6 +75,7 @@ export const {
   setTodolists,
   clearTodolists
 } = todolistsSlice.actions
+export const {selectTodolists} = todolistsSlice.selectors
 export const todolistsReducer = todolistsSlice.reducer
 
 // Thunk
@@ -86,7 +88,7 @@ export const fetchTodolistsTC = () => (dispatch: AppDispatch) => {
       dispatch(setTodolists({ todolists: res.data }))
     })
     .catch((err) => {
-      handleHttpErrors(dispatch, err)
+      handleServerNetworkError(dispatch, err)
     })
 }
 
@@ -109,7 +111,8 @@ export const addTodolistTC = (title: string) => (dispatch: AppDispatch) => {
       }
     })
     .catch((err) => {
-      handleHttpErrors(dispatch, err)
+      handleServerNetworkError(dispatch, err)
+      // как было раньше:
       // dispatch(setAppErrorAC(err.message))
       // dispatch(setAppStatus({ status: "failed" }))
     })
@@ -130,7 +133,7 @@ export const removeTodolistTC = (id: string) => (dispatch: AppDispatch) => {
       }
     })
     .catch((err) => {
-      handleHttpErrors(dispatch, err)
+      handleServerNetworkError(dispatch, err)
       dispatch(changeTodolistEntityStatus({ entityStatus: "succeeded", id }))
     })
 }
@@ -148,6 +151,6 @@ export const updateTodolistTitleTC = (arg: { id: string; title: string }) => (di
       }
     })
     .catch((err) => {
-      handleHttpErrors(dispatch, err)
+      handleServerNetworkError(dispatch, err)
     })
 }

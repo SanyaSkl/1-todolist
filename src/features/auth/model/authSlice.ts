@@ -1,7 +1,7 @@
 import { LoginArgs } from "../api/authApi.types"
 import { ResultCode } from "common/enums/enums"
-import { handleServerAppError } from "common/handleServerAppError"
-import { handleHttpErrors } from "common/handleHttpErrors"
+import { handleServerAppError } from "common/utils/handleServerAppError"
+import { handleServerNetworkError } from "common/utils/handleServerNetworkError"
 import { createSlice } from "@reduxjs/toolkit"
 import { authApi } from "../api/authApi.ts"
 import { setAppStatus } from "app/appSlice"
@@ -49,7 +49,7 @@ export const loginTC = (data: LoginArgs) => (dispatch: AppDispatch) => {
       }
     })
     .catch((error) => {
-      handleHttpErrors(dispatch, error)
+      handleServerNetworkError(dispatch, error)
     })
 }
 
@@ -69,7 +69,7 @@ export const logoutTC = () => (dispatch: AppDispatch) => {
       }
     })
     .catch((error) => {
-      handleHttpErrors(dispatch, error)
+      handleServerNetworkError(dispatch, error)
     })
 }
 
@@ -86,7 +86,7 @@ export const initializeAppTC = () => (dispatch: AppDispatch) => {
       }
     })
     .catch((error) => {
-      handleHttpErrors(dispatch, error)
+      handleServerNetworkError(dispatch, error)
     })
     .finally(() => {
       dispatch(setIsInitialized({ isInitialized: true }))
